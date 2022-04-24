@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 require('dotenv').config();
 
-const { allDepts } = require('./queryFunctions')
+const db = require('./db/queryFunctions')
 const empList = [];
 const deptQuestion = [
     {
@@ -62,16 +62,92 @@ const menuQuestion = [
         type: "list",
         name: 'menu',
         message: "What would you like to do?",
-        choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Quite'],
+        choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
     },
-]
+];
 
 function init() {
     inquirer.prompt(menuQuestion).then((answers) => {
-        switch (answers.menuQuestion){
-            case 
+        switch (answers.menu){
+            case 'View All Employees':
+                allEmployee()
+                break
+            case 'Add Employee':
+                addEmp()
+                break
+            case 'Update Employee Role':
+                updateEmp()
+                break
+            case 'View All Roles':
+                allRoles()
+                break
+            case 'Add Role':
+                addRole()
+                break
+            case 'View All Departments':
+                allDepts()
+                break
+            case 'Add Department':
+                addDept()
+                break
+            case 'Quit':
+                quit()
+                break
         }
     });
+};
+
+function allEmployee(){}
+function addEmp(){
+    inquirer.prompt(empQuestion).then((answers) => {
+        const firstN = answers.firstName
+        const lastN =  answers.lastName
+        
+        db.viewAllRoles().then(([rows]) => {
+            let roles = rows
+            const roleChoices = roles.map(({id, title}) => ({
+                name: title,
+                value: id
+            }))
+            inquirer.prompt({
+                type: 'list',
+                name: 'roleId',
+                message: "Enter employee's Role",
+                choices: roleChoices,
+            }).then((ans) => {
+                const rolesId = ans.roleId
+                db.viewEmployees().then(([rows]) => {
+                    let employees = rows
+                    const managerChoices = employees.map(({id, first_name, last_name}) => ({
+                        name: `${first_name} ${last_name}`,
+                        value: id,
+                    }))
+                    inquirer.prompt({
+                        type: 'list',
+                        name: 'ManagerId',
+                        message: "Choose Manager",
+                        choices: managerChoices,
+                    }).then((response) => {
+                        const employee = {
+                            manager_id:response.ManagerId,
+                            role_id: rolesId,
+                            first_name: firstN,
+                            last_name: lastN
+                        }
+                        db.addEmployee(employee)
+                    })
+                })
+            })
+        })
+
+    })
+}
+function updateEmp(){}
+function allRoles() {}
+function addRole(){}
+function allDepts(){}
+function addDept(){}
+function quit(){}
 
 init();
 
