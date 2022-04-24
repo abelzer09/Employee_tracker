@@ -3,7 +3,6 @@ require('dotenv').config();
 
 const { allDepts } = require('./queryFunctions')
 const empList = [];
-const opt = ["ALL_DEPT", "ALL_ROLES"];
 const deptQuestion = [
     {
         type: 'input',
@@ -67,11 +66,13 @@ const menuQuestion = [
     },
 ]
 
-function startApp() {
-    inquirer.prompt().then((answers) => {
-        switch (answers.)
-    }
+function init() {
+    inquirer.prompt(menuQuestion).then((answers) => {
+        switch (answers.menuQuestion){
+            case 
+        }
+    });
 
-startApp();
+init();
 
 
