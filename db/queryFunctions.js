@@ -28,6 +28,10 @@ class Queries {
         return this.connection.promise().query('INSERT INTO employee_role SET ?',data)
     }
 
+    addDepartment(data){
+        return this.connection.promise().query('INSERT INTO department SET ?',data)
+    }
+
 
 }
 

@@ -78,7 +78,7 @@ function swtichStatement(answers) {
                 quit()
                 break
         }
-        init();
+        // init();
 };
 
 function allEmployee(){
@@ -124,7 +124,7 @@ function addEmp(){
                             last_name: lastN
                         }
                         db.addEmployee(employee);
-                        // init();
+                        init();
                     })
                 })
             })
@@ -135,7 +135,10 @@ function addEmp(){
 function updateEmp(){
 
 }
-function allRoles() {}
+function allRoles() {
+    db.viewAllRoles()
+    .then(data=>console.log(data[0]))
+}
 function addRoles(){
     inquirer.prompt(roleQuestion).then((answers) => {
         const roleN = answers.roleName
@@ -143,8 +146,8 @@ function addRoles(){
 
         db.viewAllDepts().then(([rows]) => {
             let dept = rows
-            const deptChoices = dept.map(({id, title}) => ({
-                name: title,
+            const deptChoices = dept.map(({id, dept_name}) => ({
+                name: dept_name,
                 value: id
             }))
             inquirer.prompt({
@@ -168,7 +171,16 @@ function allDepts(){
     db.viewAllDepts()
     .then(data=>console.log(data[0]))
 }
-function addDept(){}
+function addDept(){
+    inquirer.prompt(deptQuestion).then((ans) =>{
+        const dept = ans.department
+        const department = {
+            dept_name: dept,
+        }
+        db.addDepartment(department);
+        init()
+    })
+}
 function quit(){}
 
 function init(){
