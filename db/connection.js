@@ -4,8 +4,8 @@ const dataBase = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DB_NAME
+        // password: process.env.MYSQL_PASSWORD,
+        // database: process.env.MYSQL_DB_NAME
     },
     console.log(`Connected to the database.`)
 );

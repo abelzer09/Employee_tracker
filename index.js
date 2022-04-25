@@ -34,14 +34,14 @@ const empQuestion = [
         message: "Enter employee's last name.",
     },
 ];
-// const updateQuestion = [
-//     {
-//         type: 'list',
-//         name: 'updateEmp',
-//         message: "Select Employee who's role you want to update.",
-//         choices: empList,
-//     }
-// ];
+const updateQuestion = [
+    {
+        type: 'list',
+        name: 'updateEmp',
+        message: "Select Employee who's role you want to update.",
+        choices: empList,
+    }
+];
 const menuQuestion = [
     {
         type: "list",

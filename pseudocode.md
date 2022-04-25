@@ -27,8 +27,8 @@
     - Add employee
     - Add department
     - Add role
-    - Remove employee
-    - Remove role
+    - Remove employee  // bonus //
+    - Remove role      // bonus //
     - Update employee role
     - Update employee manager
     - Exit
