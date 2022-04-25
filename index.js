@@ -1,5 +1,6 @@
-const inquirer = require('inquirer');
 require('dotenv').config();
+const inquirer = require('inquirer');
+
 
 const db = require('./db/queryFunctions')
 const deptQuestion = [
@@ -31,7 +32,7 @@ const empQuestion = [
         type: 'input',
         name: 'lastName',
         message: "Enter employee's last name.",
-    },
+    }
 ];
 // const updateQuestion = [
 //     {
@@ -47,11 +48,10 @@ const menuQuestion = [
         name: 'menu',
         message: "What would you like to do?",
         choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
-    },
+    }
 ];
 
-function menu() {
-    inquirer.prompt(menuQuestion).then((answers) => {
+function swtichStatement(answers) {
         switch (answers.menu){
             case 'View All Employees':
                 allEmployee()
@@ -78,13 +78,15 @@ function menu() {
                 quit()
                 break
         }
-    });
+        init();
 };
 
 function allEmployee(){
-    db.viewEmployee()
-    menu()
+   db.viewEmployee()
+   .then(data => console.log(data[0]))
+   init()
 }
+
 function addEmp(){
     inquirer.prompt(empQuestion).then((answers) => {
         const firstN = answers.firstName
@@ -103,7 +105,7 @@ function addEmp(){
                 choices: roleChoices,
             }).then((ans) => {
                 const rolesId = ans.roleId
-                db.viewEmployees().then(([rows]) => {
+                db.viewEmployee().then(([rows]) => {
                     let employees = rows
                     const managerChoices = employees.map(({id, first_name, last_name}) => ({
                         name: `${first_name} ${last_name}`,
@@ -122,7 +124,7 @@ function addEmp(){
                             last_name: lastN
                         }
                         db.addEmployee(employee);
-                        menu();
+                        // init();
                     })
                 })
             })
@@ -157,20 +159,23 @@ function addRoles(){
                     department_id: response.roleDept
                 }
                 db.addRole(role);
-                menu()
+                init()
             }) 
         })
     })
 }
 function allDepts(){
     db.viewAllDepts()
-    menu()
+    .then(data=>console.log(data[0]))
 }
 function addDept(){}
 function quit(){}
 
 function init(){
-    menu();
+    inquirer.prompt(menuQuestion).then(answers=>{
+        console.log(answers)
+    swtichStatement(answers)
+    })
 };
 
 init();
