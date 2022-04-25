@@ -2,7 +2,6 @@ const inquirer = require('inquirer');
 require('dotenv').config();
 
 const db = require('./db/queryFunctions')
-const empList = [];
 const deptQuestion = [
     {
         type: 'input',
@@ -34,14 +33,14 @@ const empQuestion = [
         message: "Enter employee's last name.",
     },
 ];
-const updateQuestion = [
-    {
-        type: 'list',
-        name: 'updateEmp',
-        message: "Select Employee who's role you want to update.",
-        choices: empList,
-    }
-];
+// const updateQuestion = [
+//     {
+//         type: 'list',
+//         name: 'updateEmp',
+//         message: "Select Employee who's role you want to update.",
+//         choices: empList,
+//     }
+// ];
 const menuQuestion = [
     {
         type: "list",
@@ -82,7 +81,10 @@ function menu() {
     });
 };
 
-function allEmployee(){}
+function allEmployee(){
+    db.viewEmployee()
+    menu()
+}
 function addEmp(){
     inquirer.prompt(empQuestion).then((answers) => {
         const firstN = answers.firstName
