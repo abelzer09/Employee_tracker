@@ -18,13 +18,8 @@ const roleQuestion = [
     },
     {
         type: 'input',
-        name: 'roleName',
+        name: 'roleSal',
         message: 'Enter salary for role',
-    },
-    {
-        type: 'input',
-        name: 'roleDept',
-        message: 'Enter the department role belongs to.'
     },
 ];
 const empQuestion = [
@@ -38,25 +33,15 @@ const empQuestion = [
         name: 'lastName',
         message: "Enter employee's last name.",
     },
-    {
-        type: 'input',
-        name: 'empRole',
-        message: "Enter the employee's role.",
-    },
-    {
-        type: 'input',
-        name: 'EmpManager',
-        message: "Enter Employee's Manager."
-    },
 ];
-const updateQuestion = [
-    {
-        type: 'list',
-        name: 'updateEmp',
-        message: "Select Employee who's role you want to update.",
-        choices: empList,
-    }
-];
+// const updateQuestion = [
+//     {
+//         type: 'list',
+//         name: 'updateEmp',
+//         message: "Select Employee who's role you want to update.",
+//         choices: empList,
+//     }
+// ];
 const menuQuestion = [
     {
         type: "list",
@@ -66,7 +51,7 @@ const menuQuestion = [
     },
 ];
 
-function init() {
+function menu() {
     inquirer.prompt(menuQuestion).then((answers) => {
         switch (answers.menu){
             case 'View All Employees':
@@ -82,7 +67,7 @@ function init() {
                 allRoles()
                 break
             case 'Add Role':
-                addRole()
+                addRoles()
                 break
             case 'View All Departments':
                 allDepts()
@@ -134,7 +119,8 @@ function addEmp(){
                             first_name: firstN,
                             last_name: lastN
                         }
-                        db.addEmployee(employee)
+                        db.addEmployee(employee);
+                        menu();
                     })
                 })
             })
@@ -142,12 +128,48 @@ function addEmp(){
 
     })
 }
-function updateEmp(){}
+function updateEmp(){
+
+}
 function allRoles() {}
-function addRole(){}
-function allDepts(){}
+function addRoles(){
+    inquirer.prompt(roleQuestion).then((answers) => {
+        const roleN = answers.roleName
+        const roleS = answers.roleSal
+
+        db.viewAllDepts().then(([rows]) => {
+            let dept = rows
+            const deptChoices = dept.map(({id, title}) => ({
+                name: title,
+                value: id
+            }))
+            inquirer.prompt({
+                type: 'list',
+                name: 'roleDept',
+                message: "Which department does role belong to?",
+                choices: deptChoices,
+            }).then((response) => {
+                const role = {
+                    title: roleN,
+                    salary: roleS,
+                    department_id: response.roleDept
+                }
+                db.addRole(role);
+                menu()
+            }) 
+        })
+    })
+}
+function allDepts(){
+    db.viewAllDepts()
+    menu()
+}
 function addDept(){}
 function quit(){}
+
+function init(){
+    menu();
+};
 
 init();
 
