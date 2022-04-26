@@ -34,14 +34,6 @@ const empQuestion = [
         message: "Enter employee's last name.",
     }
 ];
-// const updateQuestion = [
-//     {
-//         type: 'list',
-//         name: 'updateEmp',
-//         message: "Select Employee who's role you want to update.",
-//         choices: empList,
-//     }
-// ];
 const menuQuestion = [
     {
         type: "list",
@@ -105,7 +97,7 @@ function addEmp(){
                 choices: roleChoices,
             }).then((ans) => {
                 const rolesId = ans.roleId
-                db.viewEmployee().then(([rows]) => {
+                db.viewEmployeeMan().then(([rows]) => {
                     let employees = rows
                     const managerChoices = employees.map(({id, first_name, last_name}) => ({
                         name: `${first_name} ${last_name}`,
@@ -135,20 +127,25 @@ function addEmp(){
 
 
 function updateEmp(){
-    let employees = rows
-    const employeeChoices =employees.map(({id, first_name, last_name}) => ({
+    db.viewEmployee().then(([rows]) => {
+    let employee = rows
+    console.log(employee);
+    const employeeChoices = employee.map(({id, first_name, last_name}) => ({
         name: `${first_name} ${last_name}`,
         value: id,
     }))
+    console.log((employeeChoices));
+
     inquirer.prompt({
         type: 'list',
         name : 'updateEmp',
         message: "Which employee's role do you want to update?",
-        choices: employeeChoices,
+        choices: employeeChoices
     }).then((answer) => {
         const employE = answer.employE
-        db.viewAllRoles().then(([rows]) => {let roles = rows;
-            const roleChoices = rolse.map(({id, title}) => ({
+        db.viewAllRoles().then(([row]) => {
+            let roles = row
+            const roleChoices = roles.map(({id, title}) => ({
                 name: title,
                 value: id,
             }))
@@ -166,6 +163,7 @@ function updateEmp(){
                 db.updateEmpR(upDate);
                 init();
             })})
+    })
     })
    
 }
