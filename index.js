@@ -132,8 +132,42 @@ function addEmp(){
 
     })
 }
-function updateEmp(){
 
+
+function updateEmp(){
+    let employees = rows
+    const employeeChoices =employees.map(({id, first_name, last_name}) => ({
+        name: `${first_name} ${last_name}`,
+        value: id,
+    }))
+    inquirer.prompt({
+        type: 'list',
+        name : 'updateEmp',
+        message: "Which employee's role do you want to update?",
+        choices: employeeChoices,
+    }).then((answer) => {
+        const employE = answer.employE
+        db.viewAllRoles().then(([rows]) => {let roles = rows;
+            const roleChoices = rolse.map(({id, title}) => ({
+                name: title,
+                value: id,
+            }))
+            inquirer.prompt({
+                type: 'list',
+                name: 'roleId',
+                message: "Enter employee's Role",
+                choices: roleChoices,
+            })
+            .then ((response) => {
+                const upDate = {
+                    role_id: response.roleChoices,
+                    id: employE,
+                }
+                db.updateEmpR(upDate);
+                init();
+            })})
+    })
+   
 }
 function allRoles() {
     db.viewAllRoles()
