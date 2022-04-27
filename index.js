@@ -77,6 +77,7 @@ function swtichStatement(answers) {
 function allEmployee(){
    db.viewEmployee()
    .then(data =>{
+    console.log()
     console.table(data[0])
    });
    init(0);
@@ -173,7 +174,9 @@ function updateEmp(){
 }
 function allRoles() {
     db.viewAllRoles()
-    .then(data=> {console.table(data[0])});
+    .then(data=> {
+        console.log();
+        console.table(data[0])});
     init();
 }
 function addRoles(){
@@ -206,7 +209,9 @@ function addRoles(){
 }
 function allDepts(){
     db.viewAllDepts()
-    .then(data=>{console.table(data[0])})
+    .then(data=>{
+        console.log(),
+        console.table(data[0])})
     init();
 }
 function addDept(){
