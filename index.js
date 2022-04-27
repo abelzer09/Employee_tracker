@@ -121,8 +121,11 @@ function addEmp(){
                             first_name: firstN,
                             last_name: lastN
                         }
-                        db.addEmployee(employee);
-                        init();
+                        db.addEmployee(employee)
+                        .then(res => {
+                            res = console.log('Employee added.')
+                            init();
+                        })
                     })
                 })
             })
@@ -133,9 +136,8 @@ function addEmp(){
 
 
 function updateEmp(){
-    db.viewEmployee().then(([rows]) => {
-    let employee = rows
-    console.log(employee);
+    db.viewEmployees().then(([rows]) => {
+    let employee = rows;
     const employeeChoices = employee.map(({id, first_name, last_name}) => ({
         name: `${first_name} ${last_name}`,
         value: id,
@@ -147,7 +149,7 @@ function updateEmp(){
         message: "Which employee's role do you want to update?",
         choices: employeeChoices
     }).then((answer) => {
-        const employE = answer.employE
+        const employE = answer.updateEmp
         db.viewAllRoles().then(([row]) => {
             let roles = row
             const roleChoices = roles.map(({id, title}) => ({
@@ -161,12 +163,15 @@ function updateEmp(){
                 choices: roleChoices,
             })
             .then ((response) => {
-                const upDate = {
-                    role_id: response.roleChoices,
-                    id: employE,
-                }
-                db.updateEmpR(upDate);
-                init();
+                console.log(response);
+                const upDate = [
+                   response.roleId, employE
+                ]
+                db.updateEmpR(upDate)
+                .then(res => {
+                  res = console.log("Role updated");
+                    init();
+                })
             })})
     })
     })
@@ -201,8 +206,11 @@ function addRoles(){
                     salary: roleS,
                     department_id: response.roleDept
                 }
-                db.addRole(role);
-                init()
+                db.addRole(role)
+                .then(res => {
+                    res = console.log('New role added.');
+                    init();
+                })
             }) 
         })
     })
@@ -220,8 +228,11 @@ function addDept(){
         const department = {
             dept_name: dept,
         }
-        db.addDepartment(department);
-        init()
+        db.addDepartment(department)
+        .then(res => {
+            res = console.log('New Departement added')
+            init();
+        })
     })
 }
 function quit(){
@@ -230,7 +241,6 @@ function quit(){
 
 function init(){
     inquirer.prompt(menuQuestion).then(answers=>{
-        console.log(answers)
     swtichStatement(answers)
     })
 };

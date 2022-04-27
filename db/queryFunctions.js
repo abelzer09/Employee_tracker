@@ -19,6 +19,10 @@ class Queries {
         return this.connection.promise().query('SELECT first_name, last_name FROM employee WHERE manager_id is NULL');
     }
 
+    viewEmployees(){
+        return this.connection.promise().query('SELECT * FROM employee');
+    }
+
     viewEmployee() {
         return this.connection.promise().query("SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, department.dept_name AS department, employee_role.salary, CONCAT (manager.first_name,' ', manager.last_name) AS manager FROM employee LEFT JOIN employee_role on employee.role_id = employee_role.id LEFT JOIN department on employee_role.department_id = department.id LEFT JOIN employee manager on manager.role_id = employee.manager_id;");
     }
@@ -38,7 +42,7 @@ class Queries {
     }
 
     updateEmpR(data){
-        return this.connection.promise().query('UPDATE employee SET name = ? WHERE id = ?',data)    }
+        return this.connection.promise().query('UPDATE employee SET role_id = ? WHERE id = ?',data)    }
 
 
 }
