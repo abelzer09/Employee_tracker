@@ -1,8 +1,9 @@
 require('dotenv').config();
 const inquirer = require('inquirer');
-
-
-const db = require('./db/queryFunctions')
+const cTable = require('console.table');
+const logo = require("asciiart-logo");
+const db = require('./db/queryFunctions');
+const { viewAllRoles } = require('./db/queryFunctions');
 const deptQuestion = [
     {
         type: 'input',
@@ -75,9 +76,13 @@ function swtichStatement(answers) {
 
 function allEmployee(){
    db.viewEmployee()
-   .then(data => console.table(data[0]))
-   init()
+   .then(data =>{
+    console.table(data[0])
+   });
+   init(0);
+   
 }
+
 
 function addEmp(){
     inquirer.prompt(empQuestion).then((answers) => {
@@ -168,7 +173,7 @@ function updateEmp(){
 }
 function allRoles() {
     db.viewAllRoles()
-    .then(data=>console.log(data[0]))
+    .then(data=> {console.table(data[0])});
     init();
 }
 function addRoles(){
@@ -201,8 +206,8 @@ function addRoles(){
 }
 function allDepts(){
     db.viewAllDepts()
-    .then(data=>console.log(data[0]))
-    init()
+    .then(data=>{console.table(data[0])})
+    init();
 }
 function addDept(){
     inquirer.prompt(deptQuestion).then((ans) =>{
@@ -225,6 +230,13 @@ function init(){
     })
 };
 
-init();
+// init();
 
+function start(){
+    const welcome = logo({ name: "Employee Tracker" }).render();
 
+console.log(welcome);
+    init();
+}
+
+start();
